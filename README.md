@@ -77,7 +77,7 @@ Analiz Edilecek Metin Kolonunu Seç
 ![Kolon Sec](docs/images/select_column.png)
 
 
-## 📝 Prompt Tasarım Alanları ve İşlevleri
+## 2. 📝 Prompt Tasarım Alanlarını Doldur
 
 Uygulama arayüzündeki parametrelerin işlevleri ve arka planda AI modeline gönderilip gönderilmediği aşağıda detaylandırılmıştır:
 
@@ -109,7 +109,7 @@ Uygulama arayüzündeki parametrelerin işlevleri ve arka planda AI modeline gö
 
 test limitinden kaç veriyi işleyeceğini seç ve başlat düğmesine tıkla!
 
-# 3 🕵️‍♂️ Sonuç Kontrol Paneli
+# 3. 🕵️‍♂️ Sonuç Kontrol Paneli
 ![Prompts](docs/images/result.png)
 AI analizi tamamlandıktan sonra devreye giren bu panel, verinin doğruluğunu denetlemek ve hataları manuel olarak düzeltmek için tasarlanmıştır.
 
