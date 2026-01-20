@@ -35,6 +35,8 @@ ve klasörü aç.
 ### Gerekli paketleri kur
 
 Klasörün içine gir: cd C:\Users\emrec\NER\dspy_ai(ÖRNEKTİR)
+
+
 pip install -r requirements.txt
 
 ###  Uygulamayı Çalıştır
