@@ -22,7 +22,7 @@ Repo: https://github.com/Emrecangok/AI-Labeling-Studio
 
 ---
 
-## 📥 Kurulum (KOD BİLMEYENLER İÇİN ADIM ADIM)
+## 📥 Kurulum 
 
 ### 1 Repoyu indir
 GitHub sayfasında **Code → Download ZIP** diyerek indir  
