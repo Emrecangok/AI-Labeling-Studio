@@ -47,7 +47,7 @@ streamlit run main_.py
 http://localhost:8501
 
 
-### 🧠 Kullanım Akışı (UI Üzerinden)
+#🧠 Kullanım Akışı (UI Üzerinden)
 
 # 1.APİ AYARLARINI YAP
 
