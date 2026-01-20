@@ -90,7 +90,7 @@ Text:
 
 def run_process(df, col, role, inc, exc, out, key, prov, model, workers):
     results = [None] * len(df)
-    status = st.status("🚀 Analiz Başladı...", expanded=True)
+    status = st.status("Analiz Başladı...", expanded=True)
     p_bar = status.progress(0, text="Hazırlanıyor...")
     
     with ThreadPoolExecutor(max_workers=workers) as executor:
@@ -105,19 +105,19 @@ def run_process(df, col, role, inc, exc, out, key, prov, model, workers):
             completed += 1
             p_bar.progress(completed / len(df), text=f"İşlenen: {completed}/{len(df)}")
             
-    status.update(label="✅ Tamamlandı!", state="complete", expanded=False)
+    status.update(label="Tamamlandı!", state="complete", expanded=False)
     return results
 
 # --- ARAYÜZ (SIDEBAR) ---
 with st.sidebar:
-    st.header("⚙️ Ayarlar")
-    sel_proj = st.selectbox("📂 Projeler", get_project_list())
-    if sel_proj != "➕ Yeni Proje":
-        if st.button("📥 Projeyi Yükle", type="primary", use_container_width=True):
+    st.header("Ayarlar")
+    sel_proj = st.selectbox("Projeler", get_project_list())
+    if sel_proj != "Yeni Proje":
+        if st.button("Projeyi Yükle", type="primary", use_container_width=True):
             d = load_project_data(sel_proj)
             if d:
                 for k, v in d.items(): st.session_state[k] = v
-                st.toast(f"✅ Yüklendi: {sel_proj}")
+                st.toast(f"Yüklendi: {sel_proj}")
                 st.rerun()
 
     st.markdown("---")
@@ -141,11 +141,11 @@ text_column = None
 if uploaded:
     df = load_data(uploaded)
     c1, c2 = st.columns([3, 1])
-    c1.success(f"✅ Veri: {len(df)} Satır")
+    c1.success(f"Veri: {len(df)} Satır")
     text_column = c2.selectbox("Analiz Kolonu", df.columns)
     with st.expander("Veriyi Göster"): st.dataframe(df.head())
 else:
-    st.warning("⚠️ Lütfen önce dosya yükleyin.")
+    st.warning("Lütfen önce dosya yükleyin.")
 
 st.divider()
 
@@ -154,8 +154,8 @@ st.subheader("Prompt Tasarımı")
 
 with st.form("main_form"):
     c_meta1, c_meta2 = st.columns(2)
-    c_meta1.text_input("🏷️ Marka Adı", key="brand", placeholder="Lipton")
-    c_meta2.text_input("💾 Proje Kayıt Adı", key="proj", placeholder="lipton_analiz_v1")
+    c_meta1.text_input("Marka Adı", key="brand", placeholder="Lipton")
+    c_meta2.text_input("Proje Kayıt Adı", key="proj", placeholder="lipton_analiz_v1")
     
     st.markdown("---")
     
@@ -183,7 +183,7 @@ with st.form("main_form"):
     col_lim, col_save, col_btn = st.columns([1, 1, 2])
     limit = col_lim.number_input("Test Limiti (0=Hepsi)", 0, value=5)
     save_chk = col_save.checkbox("Ayarları Kaydet", value=True)
-    start = col_btn.form_submit_button("🚀 BAŞLAT", type="primary", use_container_width=True)
+    start = col_btn.form_submit_button("BAŞLAT", type="primary", use_container_width=True)
 
 if start:
     if df is None: st.error("Dosya yok!")
@@ -236,7 +236,7 @@ if st.session_state["res"] is not None:
         )
 
     with col_search:
-        search_term = st.text_input("🔍 Veri İçinde Ara:", placeholder="Kelime veya cümle yaz...")
+        search_term = st.text_input("Veri İçinde Ara:", placeholder="Kelime veya cümle yaz...")
 
     # 3. VERİYİ FİLTRELEME MANTIĞI
     # Orijinal verinin kopyası üzerinde işlem yapıyoruz ki asıl veriyi kaybetmeyelim
@@ -285,7 +285,7 @@ if st.session_state["res"] is not None:
              # Ana veriden bu indexleri düş
              st.session_state["res"] = st.session_state["res"].drop(index=list(deleted_indices))
              
-        st.toast("✅ Ana Veri Tabanı Güncellendi!")
+        st.toast("Ana Veri Tabanı Güncellendi!")
         st.rerun()
 
     # İNDİRME İŞLEMLERİ (ANA VERİYİ İNDİRİR - SON HALİYLE)
@@ -295,7 +295,7 @@ if st.session_state["res"] is not None:
     out = io.BytesIO()
     with pd.ExcelWriter(out, engine='xlsxwriter') as w: final_df.to_excel(w, index=False)
     
-    c_dl1.download_button("📥 Tüm Veriyi Excel İndir", out.getvalue(), "sonuc_final.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True, type="primary")
+    c_dl1.download_button("Tüm Veriyi Excel İndir", out.getvalue(), "sonuc_final.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True, type="primary")
     
     json_str = final_df.to_json(orient="records", force_ascii=False, indent=4)
-    c_dl2.download_button("📥 Tüm Veriyi JSON İndir", json_str, "sonuc_final.json", "application/json", use_container_width=True)
+    c_dl2.download_button("Tüm Veriyi JSON İndir", json_str, "sonuc_final.json", "application/json", use_container_width=True)

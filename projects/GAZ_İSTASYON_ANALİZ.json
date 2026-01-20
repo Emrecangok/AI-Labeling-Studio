@@ -1,0 +1,10 @@
+{
+    "brand": "GAZ",
+    "proj": "GAZ_İSTASYON_ANALİZ",
+    "p_role": "You are an expert data analyst evaluating customer feedback for gas station brands (e.g., Shell, Opet, BP, Petrol Ofisi, Total). Your task is to determine if the text is relevant to the gas station experience.",
+    "p_inc": "1) Purchasing fuel (gasoline, diesel, LPG) or vehicle charging experiences.\n2) Feedback about station facilities: Market (food/drink), restrooms (toilets), car wash, air/water pumps.\n3) Interaction with staff (attendants, cashiers), service quality, or hygiene/cleanliness of the station.\n4) Loyalty programs, points, mobile payment apps, or fuel prices/campaigns.\n5) General satisfaction or complaints directly related to visiting a gas station.",
+    "p_exc": "1) Texts completely unrelated to gas stations or fuel (e.g., politics, sports, generic news).\n2) Mentions of the brand solely as a sponsor for an event, without any station experience (e.g., \"Opet World Cup Sponsorship\").\n3) Corporate stock market news or financial reports not related to consumer experience.\n4) Texts not in Turkish.\n5) Texts that are too short, meaningless, or contain only URLs/Hashtags.",
+    "p_out": "Respond with ONLY one character: 1 if related, 0 if unrelated. Do not write any explanation.",
+    "prov": "Gemini",
+    "mod": "gemini-2.5-flash"
+}
