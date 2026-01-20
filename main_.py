@@ -8,8 +8,8 @@ import google.generativeai as genai
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-# --- SAYFA AYARLARI ---
-st.set_page_config(page_title="Etiketleme Studio", layout="wide", page_icon="🔥")
+# --- PAGE SETTINGS ---
+st.set_page_config(page_title="Labeling Studio", layout="wide", page_icon="🔥")
 
 PROJECT_FOLDER = "projects"
 if not os.path.exists(PROJECT_FOLDER): os.makedirs(PROJECT_FOLDER)
@@ -23,7 +23,7 @@ defaults = {
 for k, v in defaults.items():
     if k not in st.session_state: st.session_state[k] = v
 
-# --- 1. FONKSİYONLAR ---
+# --- 1. FUNCTIONS ---
 @st.cache_data(show_spinner=False)
 def load_data(file):
     try:
@@ -33,13 +33,13 @@ def load_data(file):
         elif file.name.endswith('.json'): return pd.read_json(file)
         return None
     except Exception as e:
-        st.error(f"Dosya okuma hatası: {e}")
+        st.error(f"File reading error: {e}")
         return None
 
 def get_project_list():
-    if not os.path.exists(PROJECT_FOLDER): return ["➕ Yeni Proje"]
+    if not os.path.exists(PROJECT_FOLDER): return ["➕ New Project"]
     files = [f.replace('.json', '') for f in os.listdir(PROJECT_FOLDER) if f.endswith('.json')]
-    return ["➕ Yeni Proje"] + files
+    return ["➕ New Project"] + files
 
 def save_project(filename, data):
     safe_data = {k: v for k, v in data.items() if k != "key"} 
@@ -90,8 +90,8 @@ Text:
 
 def run_process(df, col, role, inc, exc, out, key, prov, model, workers):
     results = [None] * len(df)
-    status = st.status("Analiz Başladı...", expanded=True)
-    p_bar = status.progress(0, text="Hazırlanıyor...")
+    status = st.status("Analysis Started...", expanded=True)
+    p_bar = status.progress(0, text="Preparing...")
     
     with ThreadPoolExecutor(max_workers=workers) as executor:
         future_to_index = {
@@ -103,21 +103,21 @@ def run_process(df, col, role, inc, exc, out, key, prov, model, workers):
             idx = future_to_index[future]
             results[idx] = future.result()
             completed += 1
-            p_bar.progress(completed / len(df), text=f"İşlenen: {completed}/{len(df)}")
+            p_bar.progress(completed / len(df), text=f"Processed: {completed}/{len(df)}")
             
-    status.update(label="Tamamlandı!", state="complete", expanded=False)
+    status.update(label="Completed!", state="complete", expanded=False)
     return results
 
-# --- ARAYÜZ (SIDEBAR) ---
+# --- INTERFACE (SIDEBAR) ---
 with st.sidebar:
-    st.header("Ayarlar")
-    sel_proj = st.selectbox("Projeler", get_project_list())
-    if sel_proj != "Yeni Proje":
-        if st.button("Projeyi Yükle", type="primary", use_container_width=True):
+    st.header("Settings")
+    sel_proj = st.selectbox("Projects", get_project_list())
+    if sel_proj != "New Project":
+        if st.button("Load Project", type="primary", use_container_width=True):
             d = load_project_data(sel_proj)
             if d:
                 for k, v in d.items(): st.session_state[k] = v
-                st.toast(f"Yüklendi: {sel_proj}")
+                st.toast(f"Loaded: {sel_proj}")
                 st.rerun()
 
     st.markdown("---")
@@ -129,70 +129,70 @@ with st.sidebar:
     
     model_name = st.text_input("Model", key="mod")
     api_key = st.text_input("API Key", type="password", key="key")
-    concurrency = st.slider("İş Parçacığı(threads)", 1, 20, 5)
+    concurrency = st.slider("Threads", 1, 20, 5)
 
-# --- ARAYÜZ (ANA EKRAN) ---
-st.title("Etiketleme Ana Ekranı")
+# --- INTERFACE (MAIN SCREEN) ---
+st.title("Labeling Main Screen")
 
-uploaded = st.file_uploader("Veri Seti (Excel/CSV)", type=["xlsx", "csv", "json", "jsonl"])
+uploaded = st.file_uploader("Dataset (Excel/CSV)", type=["xlsx", "csv", "json", "jsonl"])
 df = None
 text_column = None
 
 if uploaded:
     df = load_data(uploaded)
     c1, c2 = st.columns([3, 1])
-    c1.success(f"Veri: {len(df)} Satır")
-    text_column = c2.selectbox("Analiz Kolonu", df.columns)
-    with st.expander("Veriyi Göster"): st.dataframe(df.head())
+    c1.success(f"Data: {len(df)} Rows")
+    text_column = c2.selectbox("Analysis Column", df.columns)
+    with st.expander("Show Data"): st.dataframe(df.head())
 else:
-    st.warning("Lütfen önce dosya yükleyin.")
+    st.warning("Please upload a file first.")
 
 st.divider()
 
-# --- PROMPT FORMU ---
-st.subheader("Prompt Tasarımı")
+# --- PROMPT FORM ---
+st.subheader("Prompt Design")
 
 with st.form("main_form"):
     c_meta1, c_meta2 = st.columns(2)
-    c_meta1.text_input("Marka Adı", key="brand", placeholder="Lipton")
-    c_meta2.text_input("Proje Kayıt Adı", key="proj", placeholder="lipton_analiz_v1")
+    c_meta1.text_input("Brand Name", key="brand", placeholder="Lipton")
+    c_meta2.text_input("Project Save Name", key="proj", placeholder="lipton_analysis_v1")
     
     st.markdown("---")
     
     with st.container(border=True):
-        st.markdown("**1️⃣ Rol ve Giriş (Intro)**")
-        st.caption("AI'ın kim olduğunu burada tanımla.")
+        st.markdown("**1️⃣ Role and Intro**")
+        st.caption("Define who the AI is here.")
         st.text_area("Role", key="p_role", height=100, label_visibility="collapsed", placeholder="You are an annotator...")
 
     with st.container(border=True):
-        st.markdown("**2️⃣ Hangi Durumlar İLGİLİDİR? (Relevant if...)**")
-        st.caption("Maddeler halinde '1' sayılacak durumları yaz.")
+        st.markdown("**2️⃣ What is RELEVANT? (Relevant if...)**")
+        st.caption("List situations that should be marked as '1'.")
         st.text_area("Include", key="p_inc", height=150, label_visibility="collapsed", placeholder="1) Any consumer experience...")
 
     with st.container(border=True):
-        st.markdown("**3️⃣ Hangi Durumlar HARİÇTİR? (Exclude as irrelevant...)**")
-        st.caption("Maddeler halinde '0' sayılacak durumları yaz.")
+        st.markdown("**3️⃣ What is EXCLUDED? (Exclude as irrelevant...)**")
+        st.caption("List situations that should be marked as '0'.")
         st.text_area("Exclude", key="p_exc", height=150, label_visibility="collapsed", placeholder="1) Texts not included...")
 
     with st.container(border=True):
-        st.markdown("**4️⃣ Çıktı Formatı (Output)**")
-        st.caption("AI nasıl cevap versin?")
+        st.markdown("**4️⃣ Output Format**")
+        st.caption("How should AI respond?")
         st.text_area("Format", key="p_out", height=70, label_visibility="collapsed", placeholder="Respond with ONLY one character...")
 
     st.markdown("---")
     col_lim, col_save, col_btn = st.columns([1, 1, 2])
-    limit = col_lim.number_input("Test Limiti (0=Hepsi)", 0, value=5)
-    save_chk = col_save.checkbox("Ayarları Kaydet", value=True)
-    start = col_btn.form_submit_button("BAŞLAT", type="primary", use_container_width=True)
+    limit = col_lim.number_input("Test Limit (0=All)", 0, value=5)
+    save_chk = col_save.checkbox("Save Settings", value=True)
+    start = col_btn.form_submit_button("START", type="primary", use_container_width=True)
 
 if start:
-    if df is None: st.error("Dosya yok!")
-    elif not api_key: st.error("API Key yok!")
+    if df is None: st.error("No file!")
+    elif not api_key: st.error("No API Key!")
     else:
         if save_chk and st.session_state["proj"]:
             save_data = {k: st.session_state[k] for k in ["brand", "proj", "p_role", "p_inc", "p_exc", "p_out", "prov", "mod"]}
             save_project(st.session_state["proj"] + ".json", save_data)
-            st.toast("Ayarlar Kaydedildi")
+            st.toast("Settings Saved")
 
         work_df = df.copy()
         if limit > 0: work_df = work_df.head(limit)
@@ -206,12 +206,12 @@ if start:
         work_df["AI_Response"] = results
         st.session_state["res"] = work_df
 
-# --- GELİŞMİŞ SONUÇ EKRANI (FİLTRELEME & ARAMA EKLENDİ) ---
+# --- ADVANCED RESULTS SCREEN (FILTERING & SEARCH ADDED) ---
 if st.session_state["res"] is not None:
     st.divider()
-    st.header("🕵️‍♂️ Sonuç Kontrol Paneli")
+    st.header("Results Control Panel")
     
-    # 1. İSTATİSTİKLER (Veri genel özeti)
+    # 1. STATISTICS (Data overview)
     df_res = st.session_state["res"]
     try:
         count_1 = df_res[df_res["AI_Response"].astype(str).str.contains("1")].shape[0]
@@ -219,83 +219,74 @@ if st.session_state["res"] is not None:
     except: count_1, count_0 = 0, 0
     
     m1, m2, m3 = st.columns(3)
-    m1.metric("Toplam Satır", len(df_res), delta="Veri Seti")
-    m2.metric("İlgili (1)", count_1, delta="Hedef")
-    m3.metric("İlgisiz (0)", count_0, delta_color="inverse")
+    m1.metric("Total Rows", len(df_res), delta="Dataset")
+    m2.metric("Relevant (1)", count_1, delta="Target")
+    m3.metric("Irrelevant (0)", count_0, delta_color="inverse")
     
     st.markdown("---")
 
-    # 2. FİLTRE VE ARAMA ALANI (YENİ)
+    # 2. FILTER AND SEARCH AREA
     col_filter, col_search = st.columns([1, 2])
     
     with col_filter:
         filter_opt = st.radio(
-            "Görünüm Filtresi:", 
-            ["Tümü", "Sadece İlgili (1)", "Sadece İlgisiz (0)"], 
+            "View Filter:", 
+            ["All", "Only Relevant (1)", "Only Irrelevant (0)"], 
             horizontal=True
         )
 
     with col_search:
-        search_term = st.text_input("Veri İçinde Ara:", placeholder="Kelime veya cümle yaz...")
+        search_term = st.text_input("Search in Data:", placeholder="Type word or phrase...")
 
-    # 3. VERİYİ FİLTRELEME MANTIĞI
-    # Orijinal verinin kopyası üzerinde işlem yapıyoruz ki asıl veriyi kaybetmeyelim
+    # 3. DATA FILTERING LOGIC
     df_display = df_res.copy()
     
-    # Kategori Filtresi
-    if filter_opt == "Sadece İlgili (1)":
+    # Category Filter
+    if filter_opt == "Only Relevant (1)":
         df_display = df_display[df_display["AI_Response"].astype(str).str.contains("1", na=False)]
-    elif filter_opt == "Sadece İlgisiz (0)":
+    elif filter_opt == "Only Irrelevant (0)":
         df_display = df_display[df_display["AI_Response"].astype(str).str.contains("0", na=False)]
         
-    # Arama Filtresi (Büyük/küçük harf duyarsız)
+    # Search Filter (Case insensitive)
     if search_term:
         df_display = df_display[df_display[text_column].astype(str).str.contains(search_term, case=False, na=False)]
 
-    st.caption(f"Şu an görüntülenen satır sayısı: **{len(df_display)}**")
+    st.caption(f"Currently displayed rows: **{len(df_display)}**")
 
-    # 4. EDİTÖR (Filtrelenmiş Veriyi Gösterir)
+    # 4. EDITOR (Shows filtered data)
     edited_df = st.data_editor(
         df_display,
         use_container_width=True,
         num_rows="dynamic",
         key="editor",
         column_config={
-            text_column: st.column_config.TextColumn("Analiz Edilen Metin", disabled=True),
+            text_column: st.column_config.TextColumn("Analyzed Text", disabled=True),
             "AI_Response": st.column_config.TextColumn("llm_prediction", required=True, validate="^[01]$")
         }
     )
 
-    # 5. KAYIT ve İNDİRME
+    # 5. SAVE and DOWNLOAD
     st.markdown("<br>", unsafe_allow_html=True)
     c_save, c_dl1, c_dl2 = st.columns([1, 1, 1])
     
-    # AKILLI GÜNCELLEME BUTONU
-    if c_save.button("💾 Filtrelenmiş Düzeltmeleri Ana Veriye İşle", type="secondary", use_container_width=True):
-        # Pandas'ın update metodu index'leri kullanarak eşleştirme yapar.
-        # Filtrelenmiş görünümde yapılan değişiklikleri ana (session_state) verisine aktarır.
+    # SMART UPDATE BUTTON
+    if c_save.button("💾 Apply Filtered Corrections to Main Data", type="secondary", use_container_width=True):
         st.session_state["res"].update(edited_df)
         
-        # Eğer satır silindiyse (index eşleşmesi yoksa), ana veriden de silmemiz lazım.
-        # Bu biraz daha karmaşık ama basit update sadece değişen hücreleri günceller.
-        # Tam senkronizasyon için index kontrolü:
-        if len(edited_df) < len(df_display): # Eğer filtreli görünümden satır silindiyse
-             # Silinen indexleri bul
+        if len(edited_df) < len(df_display):
              deleted_indices = set(df_display.index) - set(edited_df.index)
-             # Ana veriden bu indexleri düş
              st.session_state["res"] = st.session_state["res"].drop(index=list(deleted_indices))
              
-        st.toast("Ana Veri Tabanı Güncellendi!")
+        st.toast("Main Database Updated!")
         st.rerun()
 
-    # İNDİRME İŞLEMLERİ (ANA VERİYİ İNDİRİR - SON HALİYLE)
-    # İpucu: Kullanıcı filtrelemiş olsa bile "Final" butonları her zaman TÜM verinin son halini indirir.
+    # DOWNLOAD OPERATIONS
     final_df = st.session_state["res"]
     
     out = io.BytesIO()
     with pd.ExcelWriter(out, engine='xlsxwriter') as w: final_df.to_excel(w, index=False)
     
-    c_dl1.download_button("Tüm Veriyi Excel İndir", out.getvalue(), "sonuc_final.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True, type="primary")
+    c_dl1.download_button("Download All Data as Excel", out.getvalue(), "result_final.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True, type="primary")
     
     json_str = final_df.to_json(orient="records", force_ascii=False, indent=4)
-    c_dl2.download_button("Tüm Veriyi JSON İndir", json_str, "sonuc_final.json", "application/json", use_container_width=True)
+    c_dl2.download_button("Download All Data as JSON", json_str, "result_final.json", "application/json", use_container_width=True)
