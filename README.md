@@ -103,11 +103,12 @@ Uygulama arayüzündeki parametrelerin işlevleri ve arka planda AI modeline gö
 * **Ne İşe Yarar:** Modelin gereksiz açıklama yapmasını engelleyerek, sadece istenen formatta (Örn: Sadece 0 veya 1) çıktı üretmesini sağlayan kesin talimattır.
 * **Prompt'a Etkisi:** ✅ **EVET.** (Promptun en sonuna, analiz edilecek metinden hemen önce eklenir.)
 ![Prompts](docs/images/prompts.png)
+![Prompts](docs/images/prompts_2.png)
 
 test limitinden kaç veriyi işleyeceğini seç ve başlat düğmesine tıkla!
 
 # 3 🕵️‍♂️ Sonuç Kontrol Paneli
-
+![Prompts](docs/images/result.png)
 AI analizi tamamlandıktan sonra devreye giren bu panel, verinin doğruluğunu denetlemek ve hataları manuel olarak düzeltmek için tasarlanmıştır.
 
 **1. 📊 Canlı İstatistikler**
@@ -130,5 +131,8 @@ AI analizi tamamlandıktan sonra devreye giren bu panel, verinin doğruluğunu d
 **5. 📥 Dışa Aktarım (Export)**
 * **Ne İşe Yarar:** Düzenlenmiş ve son hali verilmiş veri setini bilgisayarınıza indirir.
 * **Formatlar:** Excel (`.xlsx`) ve JSON.
+![Prompts](docs/images/exports.png)
+
+Fotoğrafta görüldüpü gibi llm_prediction sutununda dil modelinin tahminleri verilmiştir.
 
 
