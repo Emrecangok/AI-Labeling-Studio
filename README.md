@@ -47,12 +47,12 @@ http://localhost:8501
 
 ### 🧠 Kullanım Akışı (UI Üzerinden)
 
-APİ AYARLARINI YAP
+# 1.APİ AYARLARINI YAP
 
 Sol menüde yer alan teknik ayarlar şunlardır:
 
 **1. 📂 Proje Seçimi**
-* **Ne İşe Yarar:** Daha önce kaydedilmiş `.json` formatındaki ayar dosyalarını listeler ve tek tıkla yükleyerek kaldığınız yerden devam etmenizi sağlar.
+* **Ne İşe Yarar:** Daha önce kaydedilmiş `.json` formatındaki ayar dosyalarını listeler ve tek tıkla yükleyerek kaldığınız yerden devam etmenizi sağlar.(Daha önce oluşturulmadıysa yeni projede kalmalı.)
 
 **2. 🤖 API Sağlayıcı (Provider)**
 * **Ne İşe Yarar:** İşlemin hangi altyapı üzerinde çalışacağını belirler (OpenAI veya Google Gemini).
@@ -64,7 +64,7 @@ Sol menüde yer alan teknik ayarlar şunlardır:
 * **Ne İşe Yarar:** Eşzamanlı (concurrent) olarak kaç adet API isteği gönderileceğini belirler.
 
 
-Veri Seti Yükle
+# 2.Veri Seti Yükle
 
 CSV / XLSX / JSON / JSONL
 
@@ -106,7 +106,7 @@ Uygulama arayüzündeki parametrelerin işlevleri ve arka planda AI modeline gö
 
 test limitinden kaç veriyi işleyeceğini seç ve başlat düğmesine tıkla!
 
-## 🕵️‍♂️ Sonuç Kontrol ve Kalite Yönetimi (QC) Paneli
+# 3 🕵️‍♂️ Sonuç Kontrol Paneli
 
 AI analizi tamamlandıktan sonra devreye giren bu panel, verinin doğruluğunu denetlemek ve hataları manuel olarak düzeltmek için tasarlanmıştır.
 
