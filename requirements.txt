@@ -1,1 +1,8 @@
+streamlit
+pandas
+openai
+google-generativeai
+tenacity
+xlsxwriter
+openpyxl
 
