@@ -87,7 +87,7 @@ Dosyanızı sürükleyip bırakarak yükleyin.
 Yüklenen dosyadaki sütunlar sağ tarafta listelenir.  
 Yapay zekanın okuyup analiz etmesini istediğiniz metin sütununu seçin  
 (Örn: `Yorumlar`, `ReviewText`, `Tweet`).
-
+![](docs/images/select_column.png)
 ---
 
 ### 3. Prompt Alanlarını Doldur
@@ -112,7 +112,8 @@ Hangi durumlarda **0** verilmeli?
 Örn: *“Sadece 1 veya 0 yaz.”*
 
 Tüm ayarlar tamamlandıktan sonra **Test Limit** (örn. 5 satır) belirleyip **START** butonuna basın.
-
+![](docs/images/prompts.png)
+![](docs/images/prompts_2.png)
 ---
 
 ## 🕵️‍♂️ Adım 3: Sonuç Kontrol Paneli (Results)
@@ -124,3 +125,4 @@ Analiz tamamlandığında detaylı bir kontrol paneli açılır.
 - 📝 **Veri Editörü:** `AI_Response` sütununu manuel olarak düzeltme
 - 💾 **Save:** Filtreli görünümdeki değişiklikleri ana veri setine işleme
 - 📥 **Dışa Aktar:** Sonuçları Excel veya JSON olarak indirme
+  ![](docs/images/results.png)
