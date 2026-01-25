@@ -1,140 +1,104 @@
-# 🏷️ AI Labeling Studio
+🏷️ AI Labeling Studio
 
-AI Labeling Studio, kodlama bilmeyen kullanıcıların bile Large Language Model (LLM) kullanarak
-metin verilerini **relevant / irrelevant (1 / 0)** şeklinde etiketleyebilmesi için geliştirilmiş,
-web tabanlı (Streamlit) bir annotation aracıdır.
+AI Labeling Studio, kodlama bilgisine ihtiyaç duymadan Büyük Dil Modellerini (LLM) kullanarak metin verilerini Relevant (1) veya Irrelevant (0) şeklinde etiketlemenizi sağlayan, Streamlit tabanlı açık kaynaklı bir annotation aracıdır.
 
-Uygulama; kullanıcıdan prompt alır, veriyi otomatik etiketler,
-sonuçları ekranda gösterir ve Excel / JSON olarak indirmenizi sağlar.
+Bu araç ile binlerce satırlık veriyi dakikalar içinde analiz edebilir, sonuçları arayüz üzerinde filtreleyip düzeltebilir  ve Excel / JSON formatında dışarı aktarabilirsiniz.
 
-Repo: https://github.com/Emrecangok/AI-Labeling-Studio
+🔗 Repo: https://github.com/Emrecangok/AI-Labeling-Studio
 
----
+🚀 Özellikler
 
-## 🚀 Neler Yapabilir?
+Çoklu Model Desteği: OpenAI (GPT-4o, GPT-3.5) ve Google Gemini (Flash, Pro)
 
-- OpenAI ve Google Gemini desteği
-- Prompt’u parçalara bölerek yazma (Role / Include / Exclude / Output)
-- Çoklu veri üzerinde hızlı (paralel) annotation
-- Sonuçları ekranda görme ve manuel düzeltme
-- Excel ve JSON çıktı alma
-- Proje bazlı prompt kaydetme ve tekrar kullanma
+Paralel İşleme: Concurrent Futures ile çoklu thread desteği
 
----
+Detaylı Prompt Yönetimi: Role / Include / Exclude / Output ayrımı
 
-## 📥 Kurulum 
+Akıllı Arayüz: Filtreleme, arama ve manuel düzeltme
 
-### Repoyu indir
-GitHub sayfasında **Code → Download ZIP** diyerek indir  
-ve klasörü aç.
+Proje Yönetimi: Prompt ayarlarını proje bazlı kaydetme
 
----
+Esnek Çıktı: Excel (.xlsx) ve JSON dışa aktarma
 
+📥 Kurulum
+1. Repoyu İndirin
 
+git clone https://github.com/Emrecangok/AI-Labeling-Studio.git
 
-### Gerekli paketleri kur
+cd AI-Labeling-Studio
 
-Klasörün içine gir: cd C:\Users\emrec\NER\dspy_ai(ÖRNEKTİR)
-
+2. Gerekli Paketleri Kurun
 
 pip install -r requirements.txt
 
-###  Uygulamayı Çalıştır
-streamlit run main_.py
+3. Uygulamayı Çalıştırın
 
-### Tarayıcı otomatik açılmazsa:
+streamlit run main.py
+
+Tarayıcı otomatik açılmazsa:
 
 http://localhost:8501
 
+🧠 Kullanım Kılavuzu
 
-#🧠 Kullanım Akışı (UI Üzerinden)
+Uygulama arayüzü 3 ana aşamadan oluşur:
 
-# 1.APİ AYARLARINI YAP
+Ayarlar
 
-Sol menüde yer alan teknik ayarlar şunlardır:
+Prompt Tasarımı
 
-**1. 📂 Proje Seçimi**
-* **Ne İşe Yarar:** Daha önce kaydedilmiş `.json` formatındaki ayar dosyalarını listeler ve tek tıkla yükleyerek kaldığınız yerden devam etmenizi sağlar.(Daha önce oluşturulmadıysa yeni projede kalmalı.)
+Sonuç Kontrolü
 
-**2. 🤖 API Sağlayıcı (Provider)**
-* **Ne İşe Yarar:** İşlemin hangi altyapı üzerinde çalışacağını belirler (OpenAI veya Google Gemini).
+⚙️ Adım 1: API ve Sistem Ayarları (Sol Menü)
+Ayar	Açıklama
+📂 Proje Seçimi	Daha önce kaydedilmiş .json ayarlarını yükler
+🤖 API Provider	OpenAI veya Google Gemini
+🧠 Model	Örn: gpt-4o-mini, gemini-1.5-flash
+⚡ Threads	Aynı anda işlenecek satır sayısı (Önerilen: 5–10)
+📝 Adım 2: Veri Yükleme ve Prompt Tasarımı
+1. Veri Setini Yükle
 
-**3. 🧠 Model**
-* **Ne İşe Yarar:** Seçilen sağlayıcının hangi versiyonunun kullanılacağını belirler (Örn: `gpt-4o-mini`, `gemini-1.5-flash`).
+Desteklenen formatlar:
 
-**4. ⚡ Hız (Thread Sayısı)**
-* **Ne İşe Yarar:** Eşzamanlı (concurrent) olarak kaç adet API isteği gönderileceğini belirler.
+CSV
 
+XLSX
 
-# 2.Veri Seti Yükle
+JSON
 
-CSV / XLSX / JSON / JSONL
+JSONL
 
-![Veri Seti Yükle](docs/images/add_data.png)
+Yükleme sonrası Analysis Column (analiz edilecek metin sütunu) seçilir.
 
-Analiz Edilecek Metin Kolonunu Seç
-(LLM'e gönderilecek olan metindir)
-![Kolon Sec](docs/images/select_column.png)
+2. Prompt Alanlarını Doldur
 
+Not: Marka Adı ve Proje Kayıt Adı sadece sizin takibiniz içindir, modele gönderilmez.
 
-## 2. 📝 Prompt Tasarım Alanlarını Doldur
+Prompt Bileşenleri
 
-Uygulama arayüzündeki parametrelerin işlevleri ve arka planda AI modeline gönderilip gönderilmediği aşağıda detaylandırılmıştır:
+1️⃣ Role
+AI’a kimliğini tanımlayın.
+Örn: “Sen kıdemli bir veri analistisin.”
 
-**1. 🏷️ Marka Adı**
-* **Ne İşe Yarar:** Projenin hangi marka veya kategori için çalışıldığını belirten referans (metadata) alanıdır.
-* **Prompt'a Etkisi:** ❌ **HAYIR.** (Bu veri AI modeline gönderilmez, sadece kullanıcı takibi içindir.)
+2️⃣ Include (Relevant – 1)
+Hangi durumlarda 1 verilmeli?
 
-**2. 💾 Proje Kayıt Adı**
-* **Ne İşe Yarar:** Mevcut konfigürasyonun kaydedileceği `.json` dosyasının dosya adını belirler.
-* **Prompt'a Etkisi:** ❌ **HAYIR.** (AI modeline gönderilmez.)
+3️⃣ Exclude (Irrelevant – 0)
+Hangi durumlarda 0 verilmeli?
 
-**3. 1️⃣ Rol ve Giriş (Role)**
-* **Ne İşe Yarar:** AI modeline sistem rolünü ve uzmanlık alanını atar. (Örn: "Sen kıdemli bir veri analistisin.")
-* **Prompt'a Etkisi:** ✅ **EVET.** (Promptun en üst kısmına sistem mesajı olarak eklenir.)
+4️⃣ Output Format
+Örn: “Sadece 1 veya 0 yaz.”
 
-**4. 2️⃣ İlgili Durumlar (Include)**
-* **Ne İşe Yarar:** Verinin pozitif (1) olarak sınıflandırılması için gerekli kriterlerin maddeler halinde tanımlandığı alandır.
-* **Prompt'a Etkisi:** ✅ **EVET.** (Prompt içerisinde "Relevant if..." başlığı altına eklenir.)
+Tüm ayarlar tamamlandıktan sonra Test Limit belirleyip START butonuna basın.
 
-**5. 3️⃣ Hariç Durumlar (Exclude)**
-* **Ne İşe Yarar:** Verinin negatif (0) olarak sınıflandırılması veya kapsam dışı bırakılması gereken durumların tanımlandığı alandır.
-* **Prompt'a Etkisi:** ✅ **EVET.** (Prompt içerisinde "Exclude as..." başlığı altına eklenir.)
+🕵️‍♂️ Adım 3: Sonuç Kontrol Paneli (Results)
 
-**6. 4️⃣ Çıktı Formatı (Format)**
-* **Ne İşe Yarar:** Modelin gereksiz açıklama yapmasını engelleyerek, sadece istenen formatta (Örn: Sadece 0 veya 1) çıktı üretmesini sağlayan kesin talimattır.
-* **Prompt'a Etkisi:** ✅ **EVET.** (Promptun en sonuna, analiz edilecek metinden hemen önce eklenir.)
-![Prompts](docs/images/prompts.png)
-![Prompts](docs/images/prompts_2.png)
+📊 Canlı İstatistikler: 1 / 0 dağılımı
 
-test limitinden kaç veriyi işleyeceğini seç ve başlat düğmesine tıkla!
+🔍 Filtre & Arama: Sadece relevant sonuçları görme
 
-# 3. 🕵️‍♂️ Sonuç Kontrol Paneli
-![Prompts](docs/images/result.png)
-AI analizi tamamlandıktan sonra devreye giren bu panel, verinin doğruluğunu denetlemek ve hataları manuel olarak düzeltmek için tasarlanmıştır.
+📝 Veri Editörü: AI_Response alanını manuel düzeltme
 
-**1. 📊 Canlı İstatistikler**
-* **Ne İşe Yarar:** Veri setinin genel dağılımını (Toplam satır, İlgili/İlgisiz sayısı) anlık olarak gösterir.
-* **Özellik:** Editör üzerinde yapılan her manuel değişiklikte (örn: 0'ı 1 yapmak) bu rakamlar otomatik olarak güncellenir.
+💾 Save: Değişiklikleri ana veri setine kaydetme
 
-**2. 🔍 Filtreleme ve Arama**
-* **Ne İşe Yarar:** Hatalı etiketleri daha hızlı bulmak için görünümü daraltmanızı sağlar.
-* **Fonksiyonlar:**
-    * **Radyo Butonları:** Veriyi "Sadece İlgili (1)" veya "Sadece İlgisiz (0)" olarak filtreler.
-    * **Arama Çubuğu:** Metin (Text) kolonu içerisinde kelime bazlı arama yapar.
-
-**3. 📝  Veri Editörü**
-* **Ne İşe Yarar:** AI'ın hatalı etiketlediği satırları manuel olarak düzeltmenizi veya gereksiz satırları silmenizi sağlar.
-
-
-**4. 💾  Senkronizasyon (Sync Button)**
-* **Ne İşe Yarar:** Filtrelenmiş veya aranmış bir görünümde (örneğin sadece 10 satır görünürken) yaptığınız değişiklikleri, arka plandaki ana veri setindeki (örneğin 1000 satır) doğru satırlarla eşleştirip kaydeder.
-
-**5. 📥 Dışa Aktarım (Export)**
-* **Ne İşe Yarar:** Düzenlenmiş ve son hali verilmiş veri setini bilgisayarınıza indirir.
-* **Formatlar:** Excel (`.xlsx`) ve JSON.
-![Prompts](docs/images/exports.png)
-
-Fotoğrafta görüldüpü gibi llm_prediction sutununda dil modelinin tahminleri verilmiştir.
-
-
+📥 Export: Excel veya JSON indirme
