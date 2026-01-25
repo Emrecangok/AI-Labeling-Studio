@@ -1,37 +1,38 @@
-🏷️ AI Labeling Studio
+# 🏷️ AI Labeling Studio
 
-AI Labeling Studio, kodlama bilgisine ihtiyaç duymadan Büyük Dil Modellerini (LLM) kullanarak metin verilerini Relevant (1) veya Irrelevant (0) şeklinde etiketlemenizi sağlayan, Streamlit tabanlı açık kaynaklı bir annotation aracıdır.
+**AI Labeling Studio**, kodlama bilgisine ihtiyaç duymadan Büyük Dil Modellerini (LLM) kullanarak metin verilerini **Relevant (1)** veya **Irrelevant (0)** şeklinde etiketlemenizi sağlayan, Streamlit tabanlı açık kaynaklı bir annotation aracıdır.
 
-Bu araç ile binlerce satırlık veriyi dakikalar içinde analiz edebilir, sonuçları arayüz üzerinde filtreleyip düzeltebilir  ve Excel / JSON formatında dışarı aktarabilirsiniz.
+Bu araç ile binlerce satırlık veriyi dakikalar içinde analiz edebilir, sonuçları arayüz üzerinde filtreleyip düzeltebilir (**Human-in-the-loop**) ve Excel / JSON formatında dışarı aktarabilirsiniz.
 
-🔗 Repo: https://github.com/Emrecangok/AI-Labeling-Studio
+🔗 **Repo:** https://github.com/Emrecangok/AI-Labeling-Studio
 
-🚀 Özellikler
+---
 
-Çoklu Model Desteği: OpenAI (GPT-4o, GPT-3.5) ve Google Gemini (Flash, Pro)
+## 🚀 Özellikler
 
-Paralel İşleme: Concurrent Futures ile çoklu thread desteği
+- **Çoklu Model Desteği:** OpenAI (GPT-4o, GPT-3.5) ve Google Gemini (Flash, Pro)
+- **Paralel İşleme:** `Concurrent Futures` ile çoklu thread kullanımı
+- **Detaylı Prompt Yönetimi:** Role / Include / Exclude / Output ayrımı
+- **Akıllı Arayüz:** Anlık filtreleme, arama ve manuel düzeltme
+- **Proje Yönetimi:** Prompt ayarlarını proje bazlı kaydetme
+- **Esnek Çıktı:** Excel (`.xlsx`) ve JSON dışa aktarma
 
-Detaylı Prompt Yönetimi: Role / Include / Exclude / Output ayrımı
+---
 
-Akıllı Arayüz: Filtreleme, arama ve manuel düzeltme
+## 📥 Kurulum
 
-Proje Yönetimi: Prompt ayarlarını proje bazlı kaydetme
+Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyin.
 
-Esnek Çıktı: Excel (.xlsx) ve JSON dışa aktarma
+### 1. Repoyu İndirin
 
-📥 Kurulum
-1. Repoyu İndirin
-
-git clone https://github.com/Emrecangok/AI-Labeling-Studio.git
-
+git clone https://github.com/Emrecangok/AI-Labeling-Studio.git  
 cd AI-Labeling-Studio
 
-2. Gerekli Paketleri Kurun
+### 2. Gerekli Paketleri Kurun
 
 pip install -r requirements.txt
 
-3. Uygulamayı Çalıştırın
+### 3. Uygulamayı Çalıştırın
 
 streamlit run main.py
 
@@ -39,66 +40,87 @@ Tarayıcı otomatik açılmazsa:
 
 http://localhost:8501
 
-🧠 Kullanım Kılavuzu
+---
+
+## 🧠 Kullanım Kılavuzu
 
 Uygulama arayüzü 3 ana aşamadan oluşur:
 
-Ayarlar
+- Ayarlar  
+- Veri İşleme  
+- Sonuç Kontrolü  
 
-Prompt Tasarımı
+---
 
-Sonuç Kontrolü
+## ⚙️ Adım 1: API ve Sistem Ayarları (Sol Menü)
 
-⚙️ Adım 1: API ve Sistem Ayarları (Sol Menü)
-Ayar	Açıklama
-📂 Proje Seçimi	Daha önce kaydedilmiş .json ayarlarını yükler
-🤖 API Provider	OpenAI veya Google Gemini
-🧠 Model	Örn: gpt-4o-mini, gemini-1.5-flash
-⚡ Threads	Aynı anda işlenecek satır sayısı (Önerilen: 5–10)
-📝 Adım 2: Veri Yükleme ve Prompt Tasarımı
-1. Veri Setini Yükle
+| Ayar | Açıklama |
+|---|---|
+| 📂 Proje Seçimi | Daha önce kaydedilmiş `.json` ayar dosyalarını yükler. Yeni başlıyorsanız **New Project** seçili kalabilir |
+| 🤖 API Provider | OpenAI veya Google Gemini |
+| 🧠 Model | Örn: `gpt-4o-mini`, `gemini-1.5-flash` |
+| ⚡ Threads | Aynı anda işlenecek satır sayısı (Önerilen: 5–10) |
+
+---
+
+## 📝 Adım 2: Veri Yükleme ve Prompt Tasarımı
+
+Bu aşamada verinizi yükler ve yapay zekaya ne yapması gerektiğini anlatırsınız.
+
+### 1. Veri Setini Yükle
 
 Desteklenen formatlar:
 
-CSV
+- CSV  
+- XLSX  
+- JSON  
+- JSONL  
 
-XLSX
+Dosyanızı sürükleyip bırakarak yükleyin.
 
-JSON
+---
 
-JSONL
+### 2. Hedef Kolonu Seç (Analysis Column)
 
-Yükleme sonrası Analysis Column (analiz edilecek metin sütunu) seçilir.
+⚠️ **En Önemli Adım**
 
-2. Prompt Alanlarını Doldur
+Yüklenen dosyadaki sütunlar sağ tarafta listelenir.  
+Yapay zekanın okuyup analiz etmesini istediğiniz metin sütununu seçin  
+(Örn: `Yorumlar`, `ReviewText`, `Tweet`).
 
-Not: Marka Adı ve Proje Kayıt Adı sadece sizin takibiniz içindir, modele gönderilmez.
+---
 
-Prompt Bileşenleri
+### 3. Prompt Alanlarını Doldur
 
-1️⃣ Role
-AI’a kimliğini tanımlayın.
-Örn: “Sen kıdemli bir veri analistisin.”
+**Not:** Marka Adı ve Proje Kayıt Adı yalnızca sizin takibiniz içindir, modele gönderilmez.
 
-2️⃣ Include (Relevant – 1)
-Hangi durumlarda 1 verilmeli?
+#### Prompt Bileşenleri
 
-3️⃣ Exclude (Irrelevant – 0)
-Hangi durumlarda 0 verilmeli?
+1️⃣ **Rol (Role)**  
+AI’a kimliğini tanımlayın.  
+Örn: *“Sen kıdemli bir veri analistisin.”*
 
-4️⃣ Output Format
-Örn: “Sadece 1 veya 0 yaz.”
+2️⃣ **İlgili Durumlar (Include)**  
+Hangi durumlarda **1** verilmeli?  
+Örn: *“Ürün kalitesinden şikayet ediliyorsa…”*
 
-Tüm ayarlar tamamlandıktan sonra Test Limit belirleyip START butonuna basın.
+3️⃣ **Hariç Durumlar (Exclude)**  
+Hangi durumlarda **0** verilmeli?  
+Örn: *“Sadece kargo gecikmesiyse…”*
 
-🕵️‍♂️ Adım 3: Sonuç Kontrol Paneli (Results)
+4️⃣ **Çıktı Formatı (Output)**  
+Örn: *“Sadece 1 veya 0 yaz.”*
 
-📊 Canlı İstatistikler: 1 / 0 dağılımı
+Tüm ayarlar tamamlandıktan sonra **Test Limit** (örn. 5 satır) belirleyip **START** butonuna basın.
 
-🔍 Filtre & Arama: Sadece relevant sonuçları görme
+---
 
-📝 Veri Editörü: AI_Response alanını manuel düzeltme
+## 🕵️‍♂️ Adım 3: Sonuç Kontrol Paneli (Results)
 
-💾 Save: Değişiklikleri ana veri setine kaydetme
+Analiz tamamlandığında detaylı bir kontrol paneli açılır.
 
-📥 Export: Excel veya JSON indirme
+- 📊 **Canlı İstatistikler:** Toplam veri ve 1 / 0 dağılımı
+- 🔍 **Filtre & Arama:** Sadece `1` olanları filtreleme veya metin içinde arama
+- 📝 **Veri Editörü:** `AI_Response` sütununu manuel olarak düzeltme
+- 💾 **Save:** Filtreli görünümdeki değişiklikleri ana veri setine işleme
+- 📥 **Dışa Aktar:** Sonuçları Excel veya JSON olarak indirme
