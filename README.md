@@ -77,7 +77,7 @@ Desteklenen formatlar:
 - JSONL  
 
 Dosyanızı sürükleyip bırakarak yükleyin.
-
+![](docs/images/add_data.png)
 ---
 
 ### 2. Hedef Kolonu Seç (Analysis Column)
